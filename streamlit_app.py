@@ -1,3 +1,6 @@
 import streamlit as st
 
-st.write('Hello!')
+video_file = open('myimage.png', 'rb')
+video_bytes = video_file.read()
+
+st.image(video_bytes)
