@@ -1,18 +1,18 @@
 import streamlit as st
-import pandas as pd
 
-# Load the data into a pandas dataframe
-df = pd.read_csv("addresses.csv")
+def main():
+    st.title("Graph Control Panel")
 
-st.title("Data Browser")
+    chart_type = st.selectbox("Select chart type", ["Line", "Bar", "Pie"])
+    data = st.text_input("Enter data, separated by commas")
+    data = list(map(int, data.split(",")))
 
-# Show the data as a table
-st.dataframe(df)
+    if chart_type == "Line":
+        st.line_chart(data)
+    elif chart_type == "Bar":
+        st.bar_chart(data)
+    else:
+        st.pie_chart(data)
 
-# Add a search bar
-search = st.text_input("Search")
-
-# Show only the rows that match the search
-if search:
-    df = df[df["John"].str.contains(search, case=False)]
-    st.dataframe(df)
+if __name__ == "__main__":
+    main()
