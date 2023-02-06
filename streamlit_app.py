@@ -1,17 +1,7 @@
 import streamlit as st
-import datetime
 
-# Xử lý sự kiện nhấn nút
-def add_task():
-    task = st.text_input("Nhập tên công việc:")
-    now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    if task:
-        with open("tasks.txt", "a") as f:
-            f.write(f"{task} ({now})\n")
+username = st.text_input("Enter your username")
+age = st.slider("Enter your age", min_value=0, max_value=100, value=18, step=1)
 
-# Hiển thị giao diện
-st.title("To-Do List")
-st.write("Nhập tên công việc và nhấn nút để thêm vào danh sách.")
-add_button = st.button("Thêm công việc")
-if add_button:
-    add_task()
+st.write("Hello, ", username)
+st.write("Your age is: ", age)
