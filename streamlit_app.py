@@ -14,5 +14,5 @@ search = st.text_input("Search")
 
 # Show only the rows that match the search
 if search:
-    df = df[df["column_name"].str.contains(search, case=False)]
+    df = df[df["John"].str.contains(search, case=False)]
     st.dataframe(df)
