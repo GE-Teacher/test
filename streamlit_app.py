@@ -1,48 +1,24 @@
 import streamlit as st
 import pandas as pd
-import hashlib
+import matplotlib.pyplot as plt
 
-# Register a new user
-def register():
-    username = st.text_input("Username")
-    password = st.text_input("Password", type='password')
+st.title("Data Analysis App")
 
-    # Hash the password for security
-    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"])
+if uploaded_file is not None:
+    data = pd.read_csv(uploaded_file)
+    st.dataframe(data.head())
 
-    # Save the new user to a database
-    # In a real application, you would use a database library to do this
-    df = pd.DataFrame({'Username': [username], 'Password': [hashed_password]})
-    df.to_csv('users.csv', mode='a', index=False, header=False)
-    st.success("User registered!")
+    if st.checkbox("Show summary statistics"):
+        st.write(data.describe())
 
-# Log in to an existing account
-def login():
-    username = st.text_input("Username")
-    password = st.text_input("Password", type='password')
+    if st.checkbox("Plot histogram"):
+        st.write(data.hist(bins=10, figsize=(10, 5)))
+        st.pyplot()
 
-    # Hash the password for comparison
-    hashed_password = hashlib.sha256(password.encode()).hexdigest()
-
-    # Check if the username and password match a registered user
-    # In a real application, you would use a database library to do this
-    df = pd.read_csv('users.csv')
-    if (df['Username'] == username).any() and (df['Password'] == hashed_password).any():
-        st.success("Logged in as {}".format(username))
-    else:
-        st.error("Incorrect username or password")
-
-def main():
-    st.set_page_config(page_title="User Management", page_icon=":guardsman:", layout="wide")
-    menu = ["Homepage", "Login", "Register"]
-    choice = st.sidebar.selectbox("Select an option", menu)
-
-    if choice == "Login":
-        login()
-    elif choice == "Register":
-        register()
-    else:
-        st.write("Welcome to the User Management App")
-
-if __name__ == '__main__':
-    main()
+    if st.checkbox("Plot bar chart"):
+        categorical_column = st.selectbox("Select a categorical column", data.columns.tolist())
+        st.write(data.groupby(categorical_column).size().plot(kind='bar'))
+        st.pyplot()
+else:
+    st.write("Please upload a CSV file")
