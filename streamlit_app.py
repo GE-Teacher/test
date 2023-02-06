@@ -1,7 +1,11 @@
 import streamlit as st
+import pandas as pd
 
-username = st.text_input("Enter your username")
-age = st.slider("Enter your age", min_value=0, max_value=100, value=18, step=1)
+df = pd.DataFrame({'col1': [1, 2], 'col2': [3, 4]})
 
-st.write("Hello, ", username)
-st.write("Your age is: ", age)
+st.write(df)
+
+if st.button('Save as CSV'):
+    st.write("Saving data...")
+    df.to_csv('data.csv', index=False)
+    st.write("Data saved!")
