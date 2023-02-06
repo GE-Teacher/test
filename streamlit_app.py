@@ -1,11 +1,40 @@
-import streamlit as st
 import pandas as pd
 
-df = pd.DataFrame({'col1': [1, 2], 'col2': [3, 4]})
+# Create a DataFrame
+df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})
 
-st.write(df)
+# Save the DataFrame as a CSV file
+df.to_csv('data.csv', index=False)
 
-if st.button('Save as CSV'):
-    st.write("Saving data...")
-    df.to_csv('data.csv', index=False)
-    st.write("Data saved!")
+
+import git
+
+# Clone the repository
+repo = git.Repo.clone_from('https://github.com/username/repo.git', 'repo')
+
+# Add the file to the repository
+repo.index.add(['data.csv'])
+
+# Commit the changes
+repo.index.commit('Add data.csv')
+
+# Push the changes to GitHub
+origin = repo.remote(name='origin')
+origin.push()
+
+
+import streamlit as st
+
+def save_csv():
+    # Code to save the DataFrame as a CSV file
+    ...
+    
+    # Code to push the CSV file to GitHub
+    ...
+    
+    # Show a success message
+    st.success('Data saved to GitHub!')
+
+# Add a button to trigger the save function
+if st.button('Save data'):
+    save_csv()
