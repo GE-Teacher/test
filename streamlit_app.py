@@ -1,31 +1,16 @@
 import streamlit as st
-import openai
+import random
 
-openai.api_key = "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"
+st.title("Guess the Number Game")
+st.write("Guess a number between 1 and 100 and see if you can guess correctly.")
 
-st.title("Word Definition Game")
+number = random.randint(1, 100)
 
-def generate_word():
-    response = openai.Completion.create(
-        engine="text-davinci-002",
-        prompt='Define the word: ',
-        max_tokens=1024,
-        n=1,
-        stop=None,
-        temperature=0.5,
-    )
-    message = response['choices'][0]['text']
-    word = message.split(":")[1].strip()
-    definition = message.split(":")[2].strip()
-    return word, definition
+guess = st.number_input("Enter your guess:")
 
-word, definition = generate_word()
-
-st.write("What is the definition of the word: `%s`?" % word)
-
-user_answer = st.text_input("Enter your answer here:")
-
-if user_answer.lower() == definition.lower():
-    st.write("Correct!")
+if guess == number:
+    result = "Correct!"
 else:
-    st.write("Incorrect. The definition of `%s` is: `%s`." % (word, definition))
+    result = "Wrong! The number was " + str(number)
+
+st.write("Result:", result)
