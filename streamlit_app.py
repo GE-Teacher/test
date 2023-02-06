@@ -1,18 +1,19 @@
 import streamlit as st
+import requests
 
-def main():
-    st.title("Graph Control Panel")
+API_KEY = "your_api_key_here"
 
-    chart_type = st.selectbox("Select chart type", ["Line", "Bar", "Pie"])
-    data = st.text_input("Enter data, separated by commas")
-    data = list(map(int, data.split(",")))
+def get_weather(location):
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={API_KEY}"
+    response = requests.get(url)
+    return response.json()
 
-    if chart_type == "Line":
-        st.line_chart(data)
-    elif chart_type == "Bar":
-        st.bar_chart(data)
+st.title("Weather App")
+
+location = st.text_input("Enter a location")
+if location:
+    data = get_weather(location)
+    if data["cod"] == 200:
+        st.write(f"Temperature in {location}: {data['main']['temp']}°C")
     else:
-        st.pie_chart(data)
-
-if __name__ == "__main__":
-    main()
+        st.write("Location not found")
