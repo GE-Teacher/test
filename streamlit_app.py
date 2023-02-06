@@ -1,38 +1,48 @@
 import streamlit as st
 import pandas as pd
+import hashlib
 
-# Text files
+# Register a new user
+def register():
+    username = st.text_input("Username")
+    password = st.text_input("Password", type='password')
 
-text_contents = '''
-Foo, Bar
-123, 456
-789, 000
-'''
+    # Hash the password for security
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
-# Different ways to use the API
+    # Save the new user to a database
+    # In a real application, you would use a database library to do this
+    df = pd.DataFrame({'Username': [username], 'Password': [hashed_password]})
+    df.to_csv('users.csv', mode='a', index=False, header=False)
+    st.success("User registered!")
 
-st.download_button('Download CSV', text_contents, 'text/csv')
-st.download_button('Download CSV', text_contents)  # Defaults to 'text/plain'
+# Log in to an existing account
+def login():
+    username = st.text_input("Username")
+    password = st.text_input("Password", type='password')
 
-with open('data.csv', 't') as f:
-	st.download_button('Download CSV', f)  # Defaults to 'text/plain'
+    # Hash the password for comparison
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
+    # Check if the username and password match a registered user
+    # In a real application, you would use a database library to do this
+    df = pd.read_csv('users.csv')
+    if (df['Username'] == username).any() and (df['Password'] == hashed_password).any():
+        st.success("Logged in as {}".format(username))
+    else:
+        st.error("Incorrect username or password")
 
-# ---
-# Binary files
+def main():
+    st.set_page_config(page_title="User Management", page_icon=":guardsman:", layout="wide")
+    menu = ["Homepage", "Login", "Register"]
+    choice = st.sidebar.selectbox("Select an option", menu)
 
-binary_contents = b'whatever'
+    if choice == "Login":
+        login()
+    elif choice == "Register":
+        register()
+    else:
+        st.write("Welcome to the User Management App")
 
-# Different ways to use the API
-
-st.download_button('Download file', binary_contents)  # Defaults to 'application/octet-stream'
-
-with open('data.zip', 'b') as f:
-	st.download_button('Download Zip', f)  # Defaults to 'application/octet-stream'
-
-
-# You can also grab the return value of the button,
-# just like with any other button.
-
-if st.download_button(...):
-	st.write('Thanks for downloading!')
+if __name__ == '__main__':
+    main()
