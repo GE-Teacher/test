@@ -14,7 +14,7 @@ Foo, Bar
 st.download_button('Download CSV', text_contents, 'text/csv')
 st.download_button('Download CSV', text_contents)  # Defaults to 'text/plain'
 
-with open('myfile.csv', 't') as f:
+with open('data.csv', 't') as f:
 	st.download_button('Download CSV', f)  # Defaults to 'text/plain'
 
 
