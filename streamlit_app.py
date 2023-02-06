@@ -27,7 +27,7 @@ binary_contents = b'whatever'
 
 st.download_button('Download file', binary_contents)  # Defaults to 'application/octet-stream'
 
-with open('myfile.zip', 'b') as f:
+with open('data.zip', 'b') as f:
 	st.download_button('Download Zip', f)  # Defaults to 'application/octet-stream'
 
 
