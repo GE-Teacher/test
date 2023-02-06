@@ -1,19 +1,18 @@
 import streamlit as st
 import pandas as pd
 
-st.title("Data Analysis App")
+# Load the data into a pandas dataframe
+df = pd.read_csv("addresses.csv")
 
-st.write("Upload a CSV file to analyze its data")
+st.title("Data Browser")
 
-uploaded_file = st.file_uploader("Choose a CSV file", type=["csv"])
-if uploaded_file is not None:
-    data = pd.read_csv(uploaded_file)
-    st.write("Data preview:")
-    st.write(data.head())
-    
-    if st.checkbox("Show value counts"):
-        st.write(data.iloc[:, -1].value_counts().plot(kind='bar'))
-        st.pyplot()
-        
-    if st.checkbox("Show summary statistics"):
-        st.write(data.describe())
+# Show the data as a table
+st.dataframe(df)
+
+# Add a search bar
+search = st.text_input("Search")
+
+# Show only the rows that match the search
+if search:
+    df = df[df["column_name"].str.contains(search, case=False)]
+    st.dataframe(df)
