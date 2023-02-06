@@ -18,7 +18,7 @@ def save_csv():
     
     # Code to push the CSV file to GitHub
     # Clone the repository
-    repo = git.Repo.clone_from('https://github.com/username/repo.git', 'repo')
+    repo = git.Repo.clone_from('https://github.com/GE-Teacher/repo.git', 'repo')
     
     # Add the file to the repository
     repo.index.add(['data.csv'])
