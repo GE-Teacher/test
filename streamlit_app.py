@@ -1,19 +1,31 @@
 import streamlit as st
-import requests
+import openai
 
-API_KEY = "your_api_key_here"
+openai.api_key = "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"
 
-def get_weather(location):
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={API_KEY}"
-    response = requests.get(url)
-    return response.json()
+st.title("Word Definition Game")
 
-st.title("Weather App")
+def generate_word():
+    response = openai.Completion.create(
+        engine="text-davinci-002",
+        prompt='Define the word: ',
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+    message = response['choices'][0]['text']
+    word = message.split(":")[1].strip()
+    definition = message.split(":")[2].strip()
+    return word, definition
 
-location = st.text_input("Enter a location")
-if location:
-    data = get_weather(location)
-    if data["cod"] == 200:
-        st.write(f"Temperature in {location}: {data['main']['temp']}°C")
-    else:
-        st.write("Location not found")
+word, definition = generate_word()
+
+st.write("What is the definition of the word: `%s`?" % word)
+
+user_answer = st.text_input("Enter your answer here:")
+
+if user_answer.lower() == definition.lower():
+    st.write("Correct!")
+else:
+    st.write("Incorrect. The definition of `%s` is: `%s`." % (word, definition))
